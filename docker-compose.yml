@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  tickflow:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/usr/src/app
+    environment:
+      NODE_ENV: development
+      DOMAIN: http://127.0.0.1:3000/
+    ports:
+      - 3000:3000
+    command: sh -c "npm install --silent && npm run dev "
