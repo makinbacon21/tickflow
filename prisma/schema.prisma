@@ -1,0 +1,22 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// this is a model for a ticket in the db
+model Ticket {
+    id              Int         @id @default(autoincrement())
+    user_emails     String      // comma separated
+    agent_emails    String      // comma separated
+    body            String?
+    date_created    DateTime
+    date_modified   DateTime
+    completed       Boolean     @default(false)
+}
