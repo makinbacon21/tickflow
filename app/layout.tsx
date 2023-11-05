@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Raleway } from 'next/font/google'
 import SCCSNavBar from '@/components/SCCSNavBar'
-import ThemeRegistry from './ThemeRegistry';
+import ThemeRegistry from '@/app/ThemeRegistry'
 import './globals.css'
 
 const raleway = Raleway({ subsets: ['latin'] })
