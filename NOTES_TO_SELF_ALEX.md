@@ -1,3 +1,21 @@
+If you've pulled the repo for the first time, do some setup:
+npm init
+npm install next
+npm install prisma
+
+Setup the MySQL server on your local machine:
+- Download and install MySQL
+- Create a new database (if you want) then USE it or USE an existing one
+	- CREATE DATABASE <database_name>
+	- USE <database_name>
+- Create the Ticket table in this database, just copy and paste the following 
+	text into the MySQL command terminal in this file: 
+		.\prisma\migrations\20231104183440_init\migration.sql
+- Open Environment Variables > User Variables > New, and enter:
+	- Variable Name: DATABASE_URL
+	- Variable Value: mysql://user:password@localhost:3306/<database_name>
+
+
 Start the program:
 npm run dev
 
@@ -20,5 +38,11 @@ $body = @{
 } | ConvertTo-Json
 
 
+$body = @{
+    "id" = 10
+} | ConvertTo-Json
+
 3) Invoke the REST method to POST:
 Invoke-RestMethod -Uri "http://localhost:3000/api/create_ticket" -Method Post -Headers $headers -Body $body
+
+Invoke-RestMethod -Uri "http://localhost:3000/api/delete_tickets" -Method Delete -Headers $headers -Body $body
