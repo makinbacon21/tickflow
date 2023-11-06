@@ -8,14 +8,22 @@ export default async function Home() {
 
     return (
         <main className="min-h-screen flex-col items-center justify-between p-24">
-            <Link href="/create">
+            <div className="inline-flex w-full">
+                <Link href="/create">
+                    <Button
+                        key="create"
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                    >
+                        Create Ticket
+                    </Button>
+                </Link>
                 <Button
-                    key="create"
-                    sx={{ my: 2, color: 'white', display: 'block' }}
+                    key="delete"
+                    sx={{ m: 2, color: 'white', display: 'block' }}
                 >
-                    Create Ticket
+                    Delete Ticket
                 </Button>
-            </Link>
+            </div>
             <TickGrid rows={Object.values(await dynamicData.json())} />
         </main>
     )
