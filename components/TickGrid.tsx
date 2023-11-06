@@ -26,6 +26,8 @@ import {
     randomId,
     randomArrayItem,
 } from '@mui/x-data-grid-generator';
+import { json } from 'stream/consumers';
+import { parse } from 'path';
 
 interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -74,17 +76,17 @@ export default function TickGrid(props: any) {
     };
 
     const handleDeleteClick = (id: GridRowId) => () => {
-        fetch("/api/delete_tickets", {
-        method: "POST",
-        body: JSON.stringify({
-            id: parseInt(id.toString())
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
+        fetch("/api/delete_ticket", {
+            method: "POST",
+            body: JSON.stringify({
+                id: parseInt(id.toString())
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
         })
-        .then((response) => response.json())
-        .then((json) => console.log(json));
+            .then((response) => response.json())
+            .then((json) => console.log(json));
         setRows(rows.filter((row: any) => row.id !== id));
     };
 
@@ -102,9 +104,32 @@ export default function TickGrid(props: any) {
 
     const processRowUpdate = (newRow: GridRowModel) => {
         const updatedRow = { ...newRow, isNew: false };
+
+        fetch("/api/edit_ticket", {
+            method: "POST",
+            body: JSON.stringify({
+                id: parseInt(newRow.id.toString()),
+                body: {
+                    user_emails: newRow.user_emails,
+                    agent_emails: newRow.agent_emails,
+                    body: newRow.body,
+                    date_modified: new Date()
+                }
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => console.log(json));
+
         setRows(rows.map((row: any) => (row.id === newRow.id ? updatedRow : row)));
         return updatedRow;
     };
+
+    const handleProcessRowUpdateError = () => {
+        console.log("errored")
+    }
 
     const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
         setRowModesModel(newRowModesModel);
@@ -122,27 +147,23 @@ export default function TickGrid(props: any) {
             cellClassName: 'actions',
             getActions: ({ id }) => {
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-    
+
                 if (isInEditMode) {
                     return [
                         <GridActionsCellItem
                             icon={<SaveIcon />}
                             label="Save"
-                            sx={{
-                                color: 'primary.main',
-                            }}
                             onClick={handleSaveClick(id)}
                         />,
                         <GridActionsCellItem
                             icon={<CancelIcon />}
                             label="Cancel"
-                            className="textPrimary"
                             onClick={handleCancelClick(id)}
                             color="inherit"
                         />,
                     ];
                 }
-    
+
                 return [
                     <GridActionsCellItem
                         icon={<EditIcon />}
@@ -183,6 +204,7 @@ export default function TickGrid(props: any) {
                 onRowModesModelChange={handleRowModesModelChange}
                 onRowEditStop={handleRowEditStop}
                 processRowUpdate={processRowUpdate}
+                onProcessRowUpdateError={handleProcessRowUpdateError}
                 slots={{
                     toolbar: EditToolbar,
                 }}

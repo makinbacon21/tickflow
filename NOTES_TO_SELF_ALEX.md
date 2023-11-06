@@ -19,6 +19,10 @@ Setup the MySQL server on your local machine:
 Start the program:
 npm run dev
 
+Ignore all of that if you're going to use Docker,
+just start the WLS, launch ubuntu, "code .",
+run "docker compose up" and everything's ready
+
 Access the website:
 http://localhost:3000/
 
