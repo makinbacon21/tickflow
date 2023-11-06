@@ -1,7 +1,8 @@
 import prisma from '../../../lib/db'
 
-export async function DELETE(request: Request) {
+export async function POST(request: Request) {
 	const json = await request.json()
+    console.log(json)
 	await prisma.ticket.deleteMany({
 		where: json
 	}).catch(async (e) => {
