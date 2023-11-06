@@ -27,25 +27,6 @@ import {
     randomArrayItem,
 } from '@mui/x-data-grid-generator';
 
-/*export default function TickGrid(props: any) {
-    let rows = props.rows
-    return (
-        <div style={{ height: 400, width: '100%' }}>
-        <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-            pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-            },
-            }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-        />
-        </div>
-    );
-}*/
-
 interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
     setRowModesModel: (
@@ -184,7 +165,7 @@ export default function TickGrid(props: any) {
     return (
         <Box
             sx={{
-                height: 500,
+                height: '100%',
                 width: '100%',
                 '& .actions': {
                     color: 'text.secondary',
