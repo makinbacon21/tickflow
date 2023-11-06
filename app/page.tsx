@@ -17,12 +17,6 @@ export default async function Home() {
                         Create Ticket
                     </Button>
                 </Link>
-                <Button
-                    key="delete"
-                    sx={{ m: 2, color: 'white', display: 'block' }}
-                >
-                    Delete Ticket
-                </Button>
             </div>
             <TickGrid rows={Object.values(await dynamicData.json())} />
         </main>
