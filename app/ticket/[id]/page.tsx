@@ -1,28 +1,32 @@
-import prisma from '@/lib/db'
-import { Box, Button, Stack, TextField } from '@mui/material'
+import { GET } from '@/app/api/get_ticket/route'
+import { Box } from '@mui/material'
 import { redirect } from 'next/navigation'
 
-export default async function Create() {
+export default async function Ticket({ params }: {params: { id: string} }) {
 
-    async function create(formData: FormData) {
-        'use server'
-        let user_emails = formData.get('user_emails')?.toString()
-        let agent_emails = formData.get('agent_emails')?.toString()
-        let body = formData.get('body')?.toString()
-
-        await prisma.ticket.create({
-            data: {
-                user_emails: user_emails ? user_emails : "",
-                agent_emails: agent_emails ? agent_emails : "",
-                body: body ? body : "",
-                date_created: new Date(),
-                date_modified: new Date()
-            },
-        })
-
-        redirect(`/`)
+    const id_num = Number(params.id)
+    if (!id_num) {
+        // TODO Use built in next js 404
+        return (
+            <main className="flex min-h-screen flex-col items-center justify-between p-24">
+                <h1>404 - Page Not Found</h1>
+            </main>
+        )
     }
 
+    const ticket = await GET(id_num)
+
+    if (!ticket) {
+        // TODO Use built in next js 404
+
+        return (
+            <main className="flex min-h-screen flex-col items-center justify-between p-24">
+                <h1>404 - Page Not Found</h1>
+            </main>
+        )
+    }
+
+    // Probably want an edit button somewhere below
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <Box sx={{
@@ -31,42 +35,12 @@ export default async function Create() {
                 borderRadius: 1,
                 bgcolor: 'primary.dark',
             }}>
-                <form noValidate action={create}>
-                    <Stack className='p-12' spacing={2}>
-                        <TextField
-                            required
-                            id="user_emails"
-                            type="text"
-                            name="user_emails"
-                            label="Required"
-                            defaultValue="User Emails (comma-separated)"
-                        />
-                        <TextField
-                            id="agent_emails"
-                            type="text"
-                            name="agent_emails"
-                            label="Optional"
-                            defaultValue="Requested Agents (comma-separated)"
-                        />
-                        <TextField
-                            required
-                            type="text"
-                            id="body"
-                            name="body"
-                            label="Required"
-                            defaultValue="Body"
-                            multiline
-                            maxRows={4}
-                        />
-                        <Button
-                            type="submit"
-                            key='enter'
-                            sx={{ my: 2, color: 'white', display: 'block' }}
-                        >
-                            Continue
-                        </Button>
-                    </Stack>
-                </form>
+               <div>ID: {ticket.id} </div>
+               <div>User Emails: {ticket.user_emails}</div>
+               <div>Agent Emails: {ticket.agent_emails}</div>
+               <div>Body: {ticket.body}</div>
+               <div>Date Created: {ticket.date_created.toDateString()}</div>
+               <div>Date Modified: {ticket.date_modified.toDateString()}</div>
             </Box>
         </main>
     )
