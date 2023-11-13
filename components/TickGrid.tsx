@@ -39,13 +39,37 @@ interface EditToolbarProps {
 function EditToolbar(props: EditToolbarProps) {
     const { setRows, setRowModesModel } = props;
 
-    const handleClick = () => {
-        const id = randomId();
-        setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
-        setRowModesModel((oldModel) => ({
-            ...oldModel,
-            [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-        }));
+    const handleClick = async () => {
+        await fetch("/api/create_ticket", {
+            method: "POST",
+            body: JSON.stringify({
+                user_emails: "",
+                agent_emails: "",
+                body: "",
+                date_created: new Date(),
+                date_modified: new Date()
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+        .then(async (response) => await response.json())
+        .then((json) => {
+            if(json['message'] == "Failure")
+                throw new Error("Failed to create ticket");
+            const id = json['id'];
+            const date_created = json['date_created']
+            const date_modified = json['date_modified']
+            setRows((oldRows) => [...oldRows, { id, date_created: date_created,
+                                    date_modified: date_modified, isNew: true }]);
+            setRowModesModel((oldModel) => ({
+                ...oldModel,
+                [id]: { mode: GridRowModes.Edit, fieldToFocus: 'user_emails' },
+            }));
+        })
+        .catch(async (e) => {
+            console.error(e);
+        })
     };
 
     return (
@@ -91,6 +115,17 @@ export default function TickGrid(props: any) {
     };
 
     const handleCancelClick = (id: GridRowId) => () => {
+        fetch("/api/delete_ticket", {
+            method: "POST",
+            body: JSON.stringify({
+                id: parseInt(id.toString())
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => console.log(json));
         setRowModesModel({
             ...rowModesModel,
             [id]: { mode: GridRowModes.View, ignoreModifications: true },
@@ -102,10 +137,10 @@ export default function TickGrid(props: any) {
         }
     };
 
-    const processRowUpdate = (newRow: GridRowModel) => {
+    const processRowUpdate = async (newRow: GridRowModel) => {
         const updatedRow = { ...newRow, isNew: false };
 
-        fetch("/api/edit_ticket", {
+        await fetch("/api/edit_ticket", {
             method: "POST",
             body: JSON.stringify({
                 id: parseInt(newRow.id.toString()),
@@ -120,7 +155,7 @@ export default function TickGrid(props: any) {
                 "Content-type": "application/json; charset=UTF-8"
             }
         })
-            .then((response) => response.json())
+            .then(async (response) => await response.json())
             .then((json) => console.log(json));
 
         setRows(rows.map((row: any) => (row.id === newRow.id ? updatedRow : row)));
