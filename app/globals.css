@@ -20,3 +20,7 @@ body {
   color: rgb(var(--foreground-rgb));
 
 }
+
+header {
+    background-image: none !important;
+}
