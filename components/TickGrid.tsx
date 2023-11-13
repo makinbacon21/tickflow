@@ -30,6 +30,7 @@ import {
 import { json } from 'stream/consumers';
 import { parse } from 'path';
 import { redirect } from 'next/dist/server/api-utils';
+import Link from 'next/link';
 
 interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -172,10 +173,6 @@ export default function TickGrid(props: any) {
         setRowModesModel(newRowModesModel);
     };
 
-    const handleInfoClick = (id: GridRowId) => () => {
-        Response.redirect("/ticket");
-    };
-
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 50 },
         { field: 'user_emails', headerName: 'User Emails', width: 200, editable: true },
@@ -227,13 +224,14 @@ export default function TickGrid(props: any) {
             cellClassName: 'details',
             getActions: ({ id }) => {
                 return [
-                    <GridActionsCellItem
-                        icon={<InfoIcon />}
-                        label="Details"
-                        className="textPrimary"
-                        onClick={handleInfoClick(id)}
-                        color="inherit"
-                    />,
+                    <Link href={"/ticket/" + id}>
+                        <GridActionsCellItem
+                            icon={<InfoIcon />}
+                            label="Details"
+                            className="textPrimary"
+                            color="inherit"
+                        />,
+                    </Link>
                 ];
             },
         },
