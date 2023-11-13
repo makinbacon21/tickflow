@@ -12,8 +12,9 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import Link from 'next/link'
 
-const pages = ['Home', 'Help'];
+const pages = { 'Home': '/', 'Create': '/create', 'Help': '/help' };
 const settings = ['Logout'];
 
 function ResponsiveAppBar() {
@@ -84,9 +85,11 @@ function ResponsiveAppBar() {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {pages.map((page) => (
+                            {Object.entries(pages).map(([page, link]) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
+                                    <Link href={link}>
+                                        <Typography textAlign="center">{page}</Typography>
+                                    </Link>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -108,15 +111,17 @@ function ResponsiveAppBar() {
                         TickFlow
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                variant="text"
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page}
-                            </Button>
+                        {Object.entries(pages).map(([page, link]) => (
+                                <Button
+                                    key={page}
+                                    onClick={handleCloseNavMenu}
+                                    variant="text"
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                >
+                                    <Link href={link}>
+                                        {page}
+                                    </Link>
+                                </Button>
                         ))}
                     </Box>
 
