@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import InfoIcon from '@mui/icons-material/Info';
 import {
     GridRowsProp,
     GridRowModesModel,
@@ -28,6 +29,7 @@ import {
 } from '@mui/x-data-grid-generator';
 import { json } from 'stream/consumers';
 import { parse } from 'path';
+import { redirect } from 'next/dist/server/api-utils';
 
 interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -170,6 +172,10 @@ export default function TickGrid(props: any) {
         setRowModesModel(newRowModesModel);
     };
 
+    const handleInfoClick = (id: GridRowId) => () => {
+        Response.redirect("/ticket");
+    };
+
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 50 },
         { field: 'user_emails', headerName: 'User Emails', width: 200, editable: true },
@@ -211,6 +217,21 @@ export default function TickGrid(props: any) {
                         icon={<DeleteIcon />}
                         label="Delete"
                         onClick={handleDeleteClick(id)}
+                        color="inherit"
+                    />,
+                ];
+            },
+        },
+        {
+            field: 'details', type: 'actions', headerName: 'Details', width: 80,
+            cellClassName: 'details',
+            getActions: ({ id }) => {
+                return [
+                    <GridActionsCellItem
+                        icon={<InfoIcon />}
+                        label="Details"
+                        className="textPrimary"
+                        onClick={handleInfoClick(id)}
                         color="inherit"
                     />,
                 ];
