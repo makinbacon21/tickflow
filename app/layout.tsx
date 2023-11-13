@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={raleway.className}>
+            <body className={raleway.className + " bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-primary via-dark-blue to-black-600"}>
                 <ThemeRegistry options={{ key: 'mui' }}>
                     <SCCSNavBar />
                     {children}
