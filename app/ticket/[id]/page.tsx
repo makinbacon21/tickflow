@@ -1,29 +1,18 @@
 import { GET } from '@/app/api/get_ticket/route'
 import { Box } from '@mui/material'
-import { redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 
 export default async function Ticket({ params }: {params: { id: string} }) {
 
     const id_num = Number(params.id)
     if (!id_num) {
-        // TODO Use built in next js 404
-        return (
-            <main className="flex min-h-screen flex-col items-center justify-between p-24">
-                <h1>404 - Page Not Found</h1>
-            </main>
-        )
+        notFound()
     }
 
     const ticket = await GET(id_num)
 
     if (!ticket) {
-        // TODO Use built in next js 404
-
-        return (
-            <main className="flex min-h-screen flex-col items-center justify-between p-24">
-                <h1>404 - Page Not Found</h1>
-            </main>
-        )
+        notFound()
     }
 
     // Probably want an edit button somewhere below
