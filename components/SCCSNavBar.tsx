@@ -44,7 +44,7 @@ function ResponsiveAppBar() {
                         variant="h6"
                         noWrap
                         component="a"
-                        href="#app-bar-with-responsive-menu"
+                        href="/"
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
@@ -52,6 +52,7 @@ function ResponsiveAppBar() {
                             color: 'inherit',
                             textDecoration: 'none'
                         }}
+                        className="text-white transition-colors duration-200 ease-in-out hover:text-accent"
                     >
                         TickFlow
                     </Typography>
@@ -98,7 +99,7 @@ function ResponsiveAppBar() {
                         variant="h5"
                         noWrap
                         component="a"
-                        href="#app-bar-with-responsive-menu"
+                        href="/"
                         sx={{
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
@@ -116,9 +117,9 @@ function ResponsiveAppBar() {
                                     key={page}
                                     onClick={handleCloseNavMenu}
                                     variant="text"
-                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                    sx={{ my: 2, display: 'block' }}
                                 >
-                                    <Link href={link}>
+                                    <Link href={link} className="text-white transition-colors duration-200 ease-in-out hover:text-accent">
                                         {page}
                                     </Link>
                                 </Button>
