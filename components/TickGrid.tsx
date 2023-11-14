@@ -230,7 +230,7 @@ export default function TickGrid(props: any) {
                             label="Details"
                             className="textPrimary"
                             color="inherit"
-                        />,
+                        />
                     </Link>
                 ];
             },
