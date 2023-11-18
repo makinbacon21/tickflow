@@ -22,6 +22,9 @@ const config: Config = {
             "alt-blue": "#364a6d",
             "dark-blue": "#161e2c",
         },
+        screens: {
+            'xs': '0px',
+        },
     }
   },
   plugins: [],

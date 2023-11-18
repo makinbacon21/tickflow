@@ -24,7 +24,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
 
     // Probably want an edit button somewhere below
     return (
-        <Grid container spacing={2} sx={{ marginTop: { xs: '6px', sm: '0px' }, width: '100%' }}>
+        <Grid container spacing={2} sx={{ width: '100%' }}>
             <Grid container xs={12} sm={4}>
                 {/* top row */}
                 <Grid container xs={12}>
