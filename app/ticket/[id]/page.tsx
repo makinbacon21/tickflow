@@ -20,6 +20,8 @@ export default async function Ticket({ params }: { params: { id: string } }) {
         notFound()
     }
 
+    const elementShadow = 'drop-shadow(4px 6px 10px #00000044)'
+
     // Probably want an edit button somewhere below
     return (
         <Grid container spacing={2} sx={{ marginTop: { xs: '6px', sm: '0px' }, width: '100%' }}>
@@ -31,6 +33,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
+                            filter: elementShadow,
                             textAlign: 'center', borderRadius: 2, width: '100%', height: '100%', bgcolor: 'primary.dark'
                         }}>
                             <Typography variant={ticket.id.toString().length > 2 ? "h5" : "h3"} sx={{
@@ -45,19 +48,19 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                     </Grid>
                     <Grid container xs={12} md={9}>
                         <Grid sx={{ width: '100%' }}>
-                            <Box sx={{ borderRadius: 2, width: '100%', bgcolor: 'primary.dark', padding: '6px' }}>
+                            <Box sx={{ borderRadius: 2, width: '100%', bgcolor: 'primary.dark', padding: '6px', filter: elementShadow }}>
                                 Created: {ticket.date_created.toDateString()}
                             </Box>
                         </Grid>
                         <Grid sx={{ width: '100%' }}>
-                            <Box sx={{ borderRadius: 2, width: '100%', bgcolor: 'primary.dark', padding: '6px' }}>
+                            <Box sx={{ borderRadius: 2, width: '100%', bgcolor: 'primary.dark', padding: '6px', filter: elementShadow }}>
                                 Modified: {ticket.date_modified.toDateString()}
                             </Box>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid sx={{ width: '100%' }}>
-                    <List sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 2, backgroundColor: 'primary.dark' }}>
+                    <List sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 2, backgroundColor: 'primary.dark', filter: elementShadow }}>
                         <ListItem>
                             <Typography variant="h6" sx={{
                                 fontWeight: 700,
@@ -69,7 +72,9 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                         </ListItem>
                         {ticket.agent_emails.split(",").map((email) => (
                             <ListItem key={uuidv4()}>
-                                <ListItemAvatar>
+                                <ListItemAvatar sx={{
+                                    filter: elementShadow
+                                }}>
                                     <Avatar>
                                         <ImageIcon />
                                     </Avatar>
@@ -80,7 +85,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                     </List>
                 </Grid>
                 <Grid sx={{ width: '100%' }}>
-                    <List sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 2, backgroundColor: 'primary.dark' }}>
+                    <List sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 2, backgroundColor: 'primary.dark', filter: elementShadow }}>
                         <ListItem>
                             <Typography variant="h6" sx={{
                                 fontWeight: 700,
@@ -92,7 +97,9 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                         </ListItem>
                         {ticket.user_emails.split(",").map((email) => (
                             <ListItem key={uuidv4()}>
-                                <ListItemAvatar>
+                                <ListItemAvatar sx={{
+                                    filter: elementShadow
+                                }}>
                                     <Avatar>
                                         <ImageIcon />
                                     </Avatar>
@@ -109,7 +116,8 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                     borderRadius: 1,
                     bgcolor: 'primary.dark',
                     padding: '6px',
-                    minHeight: '100%'
+                    minHeight: '100%',
+                    filter: elementShadow
                 }}>
                     <Typography variant="h6" sx={{
                         fontWeight: 700,
