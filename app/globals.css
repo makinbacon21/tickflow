@@ -30,7 +30,12 @@ header {
     backdrop-filter: blur(4px) !important;
 }
 
-.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation8.MuiPopover-paper.MuiMenu-paper.MuiMenu-paper.mui-kc02vp-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation8.MuiPopover-paper.MuiMenu-paper.MuiMenu-paper {
     background-color: #31425f80 !important;
     backdrop-filter: blur(4px) !important;
+}
+
+.MuiTypography-root.MuiTypography-body2.MuiListItemText-secondary {
+    text-overflow: ellipsis;
+    overflow: hidden;
 }

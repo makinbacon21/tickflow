@@ -27,7 +27,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                 <Grid container xs={12} sm={4}>
                     {/* top row */}
                     <Grid container>
-                        <Grid xs={12} sm={3}>
+                        <Grid xs={12} md={3}>
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -44,7 +44,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                                 </Typography>
                             </Box>
                         </Grid>
-                        <Grid container xs={12} sm={9}>
+                        <Grid container xs={12} md={9}>
                             <Grid sx={{ width: '100%' }}>
                                 <Box sx={{ borderRadius: 2, width: '100%', bgcolor: 'primary.dark', padding: '6px' }}>
                                     Created: {ticket.date_created.toDateString()}
