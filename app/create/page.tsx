@@ -24,50 +24,48 @@ export default async function Create() {
     }
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <Box sx={{
-                width: '90%',
-                height: 'auto',
-                borderRadius: 1,
-                bgcolor: 'primary.dark',
-            }}>
-                <form noValidate action={create}>
-                    <Stack className='p-12' spacing={2}>
-                        <TextField
-                            required
-                            id="user_emails"
-                            type="text"
-                            name="user_emails"
-                            label="Required"
-                            defaultValue="User Emails (comma-separated)"
-                        />
-                        <TextField
-                            id="agent_emails"
-                            type="text"
-                            name="agent_emails"
-                            label="Optional"
-                            defaultValue="Requested Agents (comma-separated)"
-                        />
-                        <TextField
-                            required
-                            type="text"
-                            id="body"
-                            name="body"
-                            label="Required"
-                            defaultValue="Body"
-                            multiline
-                            maxRows={4}
-                        />
-                        <Button
-                            type="submit"
-                            key='enter'
-                            sx={{ my: 2, color: 'white', display: 'block' }}
-                        >
-                            Continue
-                        </Button>
-                    </Stack>
-                </form>
-            </Box>
-        </main>
+        <Box sx={{
+            width: '90%',
+            height: 'auto',
+            borderRadius: 1,
+            bgcolor: 'primary.dark',
+        }}>
+            <form noValidate action={create}>
+                <Stack className='p-12' spacing={2}>
+                    <TextField
+                        required
+                        id="user_emails"
+                        type="text"
+                        name="user_emails"
+                        label="Required"
+                        defaultValue="User Emails (comma-separated)"
+                    />
+                    <TextField
+                        id="agent_emails"
+                        type="text"
+                        name="agent_emails"
+                        label="Optional"
+                        defaultValue="Requested Agents (comma-separated)"
+                    />
+                    <TextField
+                        required
+                        type="text"
+                        id="body"
+                        name="body"
+                        label="Required"
+                        defaultValue="Body"
+                        multiline
+                        maxRows={4}
+                    />
+                    <Button
+                        type="submit"
+                        key='enter'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                    >
+                        Continue
+                    </Button>
+                </Stack>
+            </form>
+        </Box>
     )
 }

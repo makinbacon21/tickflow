@@ -5,8 +5,6 @@ export default async function Home() {
     const dynamicData = await GET()
 
     return (
-        <main className="min-h-screen flex-col items-center justify-between p-24">
-            <TickGrid rows={Object.values(await dynamicData.json())} />
-        </main>
+        <TickGrid rows={Object.values(await dynamicData.json())} />
     )
 }
