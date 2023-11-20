@@ -25,7 +25,7 @@ const theme = createTheme({
       main: '#f46523',
     },
     error: {
-      main: '#86001a',
+      main: '#f46523',
     },
   },
   shape: {
