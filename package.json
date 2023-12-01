@@ -19,7 +19,8 @@
     "next": "14.0.1",
     "react": "^18",
     "react-dom": "^18",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "watcher": "^2.3.0"
   },
   "devDependencies": {
     "@types/node": "^20",
