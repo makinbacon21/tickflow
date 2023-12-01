@@ -1,6 +1,7 @@
 import fs from 'fs';
 import Watcher from 'watcher';
 import { simpleParser } from 'mailparser';
+import prisma from '@/lib/db'
 
 const logfile = process.argv[2]
 const filepath = '/var/mail/tickflow'
@@ -14,7 +15,7 @@ const getCurrent = () => fs.readFileSync(filepath, {
 
 fs.truncate(filepath, 0, function () { console.log('done') })
 
-watcher.on('change', (event) => {
+watcher.on('change', async (event) => {
     console.log("event: " + event);
     let curFile = getCurrent()
     fs.truncate(filepath, 0, function () { console.log('done') })
@@ -32,6 +33,7 @@ watcher.on('change', (event) => {
                 fs.writeFileSync(logfile, out)
             else
                 console.log(out)
+            
         })
         .catch(err => {
             errorString = "Failed to parse email! " + err
@@ -40,6 +42,21 @@ watcher.on('change', (event) => {
             else
                 console.log(errorString)
         });
+
+    await fetch("localhost/api/create_ticket", {
+        method: "POST",
+        body: JSON.stringify({
+            user_emails: out.from,
+            agent_emails: "",
+            body: out.text,
+            date_created: new Date(),
+            date_modified: new Date()
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+
 });
 
 process.on('exit', function () {
