@@ -1,5 +1,13 @@
 version: '3.4'
 
+# This is the TickFlow production Docker Compose spec
+# You MUST have a .env file in this dir with the following vars set:
+# MARIADB_ROOT_PASSWORD
+# MARIADB_USER
+# MARIADB_PASSWORD
+# MARIADB_DATABASE
+# INTERNAL_PORT
+
 services:
   tickflow:
     build:
@@ -7,21 +15,19 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
-      DATABASE_URL: "mysql://root:p@ssw0rd@tickflow-db:3306/tickflow_db"
+      # TODO: user perms instead of root
+      DATABASE_URL: "mysql://root:${MARIADB_ROOT_PASSWORD}@tickflow-db:3306/MARIADB_DATABASE"
     volumes:
       - ./logs:/usr/src/app/logs
       - /var/mail/tickflow:/usr/src/app/mailbox
     ports:
-      - 3000:3000
+      - "${INTERNAL_PORT}:3000"
+    # Ensure db is migrated to current version, generate bindings, and serve
     command: sh -c "sleep 10 && npx prisma migrate dev --name init && npx prisma generate && npm start "
   tickflow-db:
     image: mariadb:11
-    #volumes:
-      #- ./mock_sql:/docker-entrypoint-initdb.d
-    #ports:
-      #- 3306:3306
-    environment:
-      - MARIADB_ROOT_PASSWORD=p@ssw0rd
-      - MARIADB_USER=user
-      - MARIADB_PASSWORD=p@ssw0rd
-      - MARIADB_DATABASE=tickflow_db
+    volumes:
+      - ./db-backup:/backup
+      - ./data:/var/lib/mysql
+    env_file:
+      - .env
