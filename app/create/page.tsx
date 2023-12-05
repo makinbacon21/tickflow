@@ -40,7 +40,7 @@ export default async function Create() {
       to: "tmakin1@swarthmore.edu",
       // TODO Refrence ID here	
       subject: "SCCS Ticket Created",
-      text: "The following updates were made to your ticket: ".concat(body);
+      text: "The following updates were made to your ticket: ".concat(body ? body : "")
     };
 
     console.log("HERE\n");
