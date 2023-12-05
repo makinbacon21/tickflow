@@ -3,6 +3,18 @@ import prisma from '@/lib/db'
 import { Box, Button, Stack, TextField } from '@mui/material'
 import { redirect } from 'next/navigation'
 
+var nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  host: "ibis.sccs.swarthmore.edu",
+  port: 587,
+  // auth: {
+  //   // TODO: replace `user` and `pass` values
+  //   user: "REPLACE-WITH-YOUR-ALIAS@YOURDOMAIN.COM",
+  //   pass: "REPLACE-WITH-YOUR-GENERATED-PASSWORD",
+  // },
+});
+
 export default async function Create() {
 
     async function create(formData: FormData) {
@@ -20,6 +32,26 @@ export default async function Create() {
                 date_modified: new Date()
             },
         })
+
+      var mailOptions = {
+        from: 'staff@sccs.swarthmore.edu',
+        // TODO Not sure if this is parsed in the manner we would want
+        // to: json['user_emails'],
+        to: "ldouhov1@swarthmore.edu",
+        subject: 'Sending Email using Node.js',
+        text: 'That was easy!'
+      };
+
+      console.log("HERE\n");
+      
+      transporter.sendMail(mailOptions, function(error: any, info: { response: string; }){
+        if (error) {
+          console.log(error);
+          // TODO What should we do if mail send errors after successful alterations
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
 
         redirect(`/`)
     }
