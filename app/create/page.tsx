@@ -8,8 +8,8 @@ import nodemailer from 'nodemailer';
 const transporter = nodemailer.createTransport({
   host: "ibis.sccs.swarthmore.edu",
   port: 25,
+  // Authentication is not necessary for our system
   // auth: {
-  //   // TODO: replace `user` and `pass` values
   //   user: "REPLACE-WITH-YOUR-ALIAS@YOURDOMAIN.COM",
   //   pass: "REPLACE-WITH-YOUR-GENERATED-PASSWORD",
   // },
@@ -34,14 +34,13 @@ export default async function Create() {
     })
 
     var mailOptions = {
-      from: 'staff@sccs.swarthmore.edu',
-      // TODO Not sure if this is parsed in the manner we would want
-      // to: json['user_emails'],
-      // RE TODO: I mean we already had the parsed string so...
-      // THIS IS WITH THE ASSUMPTION THAT THE FORM CHECKS FOR THE REQUIRED FIELD
-      to: user_emails,
-      subject: 'SCCS Ticket Created',
-      text: 'Hello <user>, \n We\'ve created a ticket for you. \n-SCCS Staff'
+      from: "tickflow@sccs.swarthmore.edu",
+      // TODO Switch to adressing from testing email
+      // to: (json['user_emails'].concat(", ")).concat(json[agent_emails]),
+      to: "tmakin1@swarthmore.edu",
+      // TODO Refrence ID here	
+      subject: "SCCS Ticket Created",
+      text: "The following updates were made to your ticket: ".concat(body);
     };
 
     console.log("HERE\n");
