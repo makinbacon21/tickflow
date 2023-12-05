@@ -1,5 +1,4 @@
 export const dynamic = 'force-dynamic'
-import { Josefin_Sans } from 'next/font/google'
 import prisma from '../../../lib/db'
 
 export async function POST(request: Request) {

@@ -56,23 +56,25 @@ function EditToolbar(props: EditToolbarProps) {
                 "Content-type": "application/json; charset=UTF-8"
             }
         })
-        .then(async (response) => await response.json())
-        .then((json) => {
-            if(json['message'] == "Failure")
-                throw new Error("Failed to create ticket");
-            const id = json['id'];
-            const date_created = json['date_created']
-            const date_modified = json['date_modified']
-            setRows((oldRows) => [...oldRows, { id, date_created: date_created,
-                                    date_modified: date_modified, isNew: true }]);
-            setRowModesModel((oldModel) => ({
-                ...oldModel,
-                [id]: { mode: GridRowModes.Edit, fieldToFocus: 'user_emails' },
-            }));
-        })
-        .catch(async (e) => {
-            console.error(e);
-        })
+            .then(async (response) => await response.json())
+            .then((json) => {
+                if (json['message'] == "Failure")
+                    throw new Error("Failed to create ticket");
+                const id = json['id'];
+                const date_created = json['date_created']
+                const date_modified = json['date_modified']
+                setRows((oldRows) => [...oldRows, {
+                    id, date_created: date_created,
+                    date_modified: date_modified, isNew: true
+                }]);
+                setRowModesModel((oldModel) => ({
+                    ...oldModel,
+                    [id]: { mode: GridRowModes.Edit, fieldToFocus: 'user_emails' },
+                }));
+            })
+            .catch(async (e) => {
+                console.error(e);
+            })
     };
 
     return (

@@ -11,6 +11,8 @@ import prisma from '../../../lib/db'
 import nodemailer from 'nodemailer';
 import { ReplyStack } from '@/components/ReplyStack';
 
+let ticket: any = undefined
+
 const transporter = nodemailer.createTransport({
     host: "ibis.sccs.swarthmore.edu",
     port: 25,
@@ -31,14 +33,30 @@ async function getTicket(id: number) {
 
 async function reply(formData: FormData) {
     'use server'
-    let body = formData.get('body')?.toString()
+    let newBody = formData.get('body')?.toString()
+
+    if (!newBody) {
+        newBody = ""
+    }
 
     var mailOptions = {
         from: 'staff@sccs.swarthmore.edu',
-        to: 'ale3@swarthmore.edu',
-        subject: 'Replied to email',
-        text: body
+        to: ticket.user_emails,
+        subject: 'SCCS replied to your ticket',
+        text: newBody
     };
+
+    await prisma.ticket.update({
+        where: {
+            id: ticket.id
+        },
+        data: {
+            body: newBody.concat(ticket.body),
+            date_modified: new Date()
+        },
+    }).catch(async (e) => {
+        console.log("edit failed")
+    })
 
     transporter.sendMail(mailOptions, function (error: any, info: { response: string; }) {
         if (error) {
@@ -60,7 +78,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
         notFound()
     }
 
-    const ticket = await getTicket(id_num)
+    ticket = await getTicket(id_num)
 
     if (!ticket) {
         notFound()
@@ -117,7 +135,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                                 Agents
                             </Typography>
                         </ListItem>
-                        {ticket.agent_emails.split(",").map((email) => (
+                        {ticket.agent_emails.split(",").map((email: any) => (
                             <ListItem key={uuidv4()}>
                                 <ListItemAvatar sx={{
                                     filter: elementShadow
@@ -142,7 +160,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                                 Users
                             </Typography>
                         </ListItem>
-                        {ticket.user_emails.split(",").map((email) => (
+                        {ticket.user_emails.split(",").map((email: any) => (
                             <ListItem key={uuidv4()}>
                                 <ListItemAvatar sx={{
                                     filter: elementShadow

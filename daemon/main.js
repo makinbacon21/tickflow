@@ -58,7 +58,7 @@ watcher.on('change', async (event) => {
     }
 
     // post ticket
-    await fetch("http://localhost:3000/api/create_ticket", {
+    await fetch("http://tickflow.sccs.swarthmore.edu/api/create_ticket", {
         method: "POST",
         body: JSON.stringify(out),
         headers: {
