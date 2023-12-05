@@ -1,4 +1,3 @@
-import { GET } from '@/app/api/get_ticket/route'
 import { Box, List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography } from '@mui/material'
 import ImageIcon from '@mui/icons-material/Image';
 import WorkIcon from '@mui/icons-material/Work';
@@ -7,6 +6,16 @@ import { notFound } from 'next/navigation'
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { v4 as uuidv4 } from 'uuid';
 
+import prisma from '../../../lib/db'
+
+async function getTicket(id: number) {
+	return (await prisma.ticket.findUnique({
+    	where: {
+        	id: id
+		}
+	}))
+}
+
 export default async function Ticket({ params }: { params: { id: string } }) {
 
     const id_num = Number(params.id)
@@ -14,7 +23,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
         notFound()
     }
 
-    const ticket = await GET(id_num)
+    const ticket = await getTicket(id_num)
 
     if (!ticket) {
         notFound()

@@ -5,16 +5,15 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    volumes:
-      - .:/usr/src/app
     environment:
-      NODE_ENV: development
-      DOMAIN: http://127.0.0.1:3000/
+      NODE_ENV: production
       DATABASE_URL: "mysql://root:p@ssw0rd@tickflow-db:3306/tickflow_db"
+    volumes:
+      - ./logs:/usr/src/app/logs
+      - /var/mail/tickflow:/usr/src/app/mailbox
     ports:
       - 3000:3000
-    command: sh -c "npm install --silent && sleep 10 && npx prisma migrate dev --name init && npx prisma generate && npm run dev "
-  
+    command: sh -c "sleep 10 && npx prisma migrate dev --name init && npx prisma generate && npm start "
   tickflow-db:
     image: mariadb:11
     #volumes:

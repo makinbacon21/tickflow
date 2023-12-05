@@ -1,13 +1,12 @@
 import fs from 'fs';
 import Watcher from 'watcher';
 import { simpleParser } from 'mailparser';
-import prisma from '@/lib/db'
 
 const logfile = process.argv[2]
 const filepath = '/var/mail/tickflow'
 
 // Attaching the "all" handler manually
-const watcher = new Watcher(filepath);
+const watcher = new Watcher(filepath, { persistent: true });
 
 const getCurrent = () => fs.readFileSync(filepath, {
     encoding: 'ascii'
@@ -20,42 +19,55 @@ watcher.on('change', async (event) => {
     let curFile = getCurrent()
     fs.truncate(filepath, 0, function () { console.log('done') })
     let out = {}
+
+    if(!curFile) {
+      console.log("empty file!")
+      return
+    }
+
     simpleParser(curFile)
-        .then(parsed => {
+        .then((parsed) => {
+            if(!parsed || parsed === {}) {
+              console.log("nothing parsed!")
+              return
+            }
+            console.log("parsed:")
+            console.log(parsed)
             out = {
                 subject: parsed.subject,
-                text: parsed.text,
+                body: parsed.text,
                 date: parsed.date,
-                to: parsed.to.text,
-                from: parsed.from.text
+                agent_emails: parsed.to.text,
+                user_emails: parsed.from.text
             }
             if (logfile && logfile != "stdout")
                 fs.writeFileSync(logfile, out)
             else
                 console.log(out)
-            
         })
-        .catch(err => {
-            errorString = "Failed to parse email! " + err
+        .catch((err) => {
+            let errorString = "Failed to parse email! " + err
             if (logfile && logfile != "stdout")
                 fs.writeFileSync(logfile, errorString)
             else
                 console.log(errorString)
         });
 
-    await fetch("localhost/api/create_ticket", {
+   if(!out || out === {}) {
+      console.log("empty!")
+      return
+   }
+
+   console.log(out)
+
+    await fetch("http://localhost:3000/api/create_ticket", {
         method: "POST",
-        body: JSON.stringify({
-            user_emails: out.from,
-            agent_emails: "",
-            body: out.text,
-            date_created: new Date(),
-            date_modified: new Date()
-        }),
+        body: JSON.stringify(out),
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
-    })
+    }).then((response) => response.json())
+      .then((json) => console.log(json))
 
 });
 

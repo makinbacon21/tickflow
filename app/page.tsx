@@ -1,10 +1,15 @@
+export const dynamic = 'force-dynamic'
+
 import TickGrid from '@/components/TickGrid'
-import { GET } from '@/app/api/get_tickets/route'
+import prisma from '../lib/db'
+
+async function getData() {
+	return await prisma.ticket.findMany()
+}
 
 export default async function Home() {
-    const dynamicData = await GET()
-
+	const dynamicData = await getData()
     return (
-        <TickGrid rows={Object.values(await dynamicData.json())} />
+        <TickGrid rows={Object.values(dynamicData)} />
     )
 }
