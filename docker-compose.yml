@@ -19,7 +19,6 @@ services:
       DATABASE_URL: "mysql://root:${MARIADB_ROOT_PASSWORD}@tickflow-db:3306/MARIADB_DATABASE"
     volumes:
       - ./logs:/usr/src/app/logs
-      - /var/mail/tickflow:/usr/src/app/mailbox
     ports:
       - "${INTERNAL_PORT}:3000"
     # Ensure db is migrated to current version, generate bindings, and serve
