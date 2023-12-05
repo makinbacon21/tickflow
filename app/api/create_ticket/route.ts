@@ -33,9 +33,23 @@ export async function POST(request: Request) {
         return Response.json({message: "Failure"})
       })
 
-
+      var mailOptions = {
+        from: 'staff@sccs.swarthmore.edu',
+        // TODO Not sure if this is parsed in the manner we would want
+        to: json['user_emails'],
+        subject: 'Sending Email using Node.js',
+        text: 'That was easy!'
+      };
       
-
+      transporter.sendMail(mailOptions, function(error: any, info: { response: string; }){
+        if (error) {
+          console.log(error);
+          // TODO What should we do if mail send errors after successful alterations
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+      
       return Response.json({message: "Success", id: id,
                     date_created: date_created, date_modified: date_modified})
 }
