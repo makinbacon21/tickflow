@@ -3,11 +3,11 @@ import prisma from '@/lib/db'
 import { Box, Button, Stack, TextField } from '@mui/material'
 import { redirect } from 'next/navigation'
 
-var nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
   host: "ibis.sccs.swarthmore.edu",
-  port: 587,
+  port: 25,
   // auth: {
   //   // TODO: replace `user` and `pass` values
   //   user: "REPLACE-WITH-YOUR-ALIAS@YOURDOMAIN.COM",
@@ -37,7 +37,7 @@ export default async function Create() {
         from: 'staff@sccs.swarthmore.edu',
         // TODO Not sure if this is parsed in the manner we would want
         // to: json['user_emails'],
-        to: "ldouhov1@swarthmore.edu",
+        to: "tmakin1@swarthmore.edu",
         subject: 'Sending Email using Node.js',
         text: 'That was easy!'
       };
