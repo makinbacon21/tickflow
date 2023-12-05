@@ -17,55 +17,57 @@ const transporter = nodemailer.createTransport({
 
 export default async function Create() {
 
-    async function create(formData: FormData) {
-        'use server'
-        let user_emails = formData.get('user_emails')?.toString()
-        let agent_emails = formData.get('agent_emails')?.toString()
-        let body = formData.get('body')?.toString()
+  async function create(formData: FormData) {
+    'use server'
+    let user_emails = formData.get('user_emails')?.toString()
+    let agent_emails = formData.get('agent_emails')?.toString()
+    let body = formData.get('body')?.toString()
 
-        await prisma.ticket.create({
-            data: {
-                user_emails: user_emails ? user_emails : "",
-                agent_emails: agent_emails ? agent_emails : "",
-                body: body ? body : "",
-                date_created: new Date(),
-                date_modified: new Date()
-            },
-        })
+    await prisma.ticket.create({
+      data: {
+        user_emails: user_emails ? user_emails : "",
+        agent_emails: agent_emails ? agent_emails : "",
+        body: body ? body : "",
+        date_created: new Date(),
+        date_modified: new Date()
+      },
+    })
 
-      var mailOptions = {
-        from: 'staff@sccs.swarthmore.edu',
-        // TODO Not sure if this is parsed in the manner we would want
-        // to: json['user_emails'],
-        to: "tmakin1@swarthmore.edu",
-        subject: 'Sending Email using Node.js',
-        text: 'That was easy!'
-      };
+    var mailOptions = {
+      from: 'staff@sccs.swarthmore.edu',
+      // TODO Not sure if this is parsed in the manner we would want
+      // to: json['user_emails'],
+      // RE TODO: I mean we already had the parsed string so...
+      // THIS IS WITH THE ASSUMPTION THAT THE FORM CHECKS FOR THE REQUIRED FIELD
+      to: user_emails,
+      subject: 'SCCS Ticket Created',
+      text: 'Hello <user>, \n We\'ve created a ticket for you. \n-SCCS Staff'
+    };
 
-      console.log("HERE\n");
-      
-      transporter.sendMail(mailOptions, function(error: any, info: { response: string; }){
-        if (error) {
-          console.log(error);
-          // TODO What should we do if mail send errors after successful alterations
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
+    console.log("HERE\n");
 
-        redirect(`/`)
-    }
+    transporter.sendMail(mailOptions, function (error: any, info: { response: string; }) {
+      if (error) {
+        console.log(error);
+        // TODO What should we do if mail send errors after successful alterations
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
 
-    return (
-        <Box sx={{
-            width: '90%',
-            height: 'auto',
-            borderRadius: 1,
-            bgcolor: 'primary.dark',
-        }}>
-            <form action={create}>
-                <FormStack/>
-            </form>
-        </Box>
-    )
+    redirect(`/`)
+  }
+
+  return (
+    <Box sx={{
+      width: '90%',
+      height: 'auto',
+      borderRadius: 1,
+      bgcolor: 'primary.dark',
+    }}>
+      <form action={create}>
+        <FormStack />
+      </form>
+    </Box>
+  )
 }

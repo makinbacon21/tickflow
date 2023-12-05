@@ -8,12 +8,49 @@ import { v4 as uuidv4 } from 'uuid';
 
 import prisma from '../../../lib/db'
 
+import nodemailer from 'nodemailer';
+import { ReplyStack } from '@/components/ReplyStack';
+
+const transporter = nodemailer.createTransport({
+    host: "ibis.sccs.swarthmore.edu",
+    port: 25,
+    // auth: {
+    //   // TODO: replace `user` and `pass` values
+    //   user: "REPLACE-WITH-YOUR-ALIAS@YOURDOMAIN.COM",
+    //   pass: "REPLACE-WITH-YOUR-GENERATED-PASSWORD",
+    // },
+});
+
 async function getTicket(id: number) {
-	return (await prisma.ticket.findUnique({
-    	where: {
-        	id: id
-		}
-	}))
+    return (await prisma.ticket.findUnique({
+        where: {
+            id: id
+        }
+    }))
+}
+
+async function reply(formData: FormData) {
+    'use server'
+    let body = formData.get('body')?.toString()
+
+    var mailOptions = {
+        from: 'staff@sccs.swarthmore.edu',
+        to: 'ale3@swarthmore.edu',
+        subject: 'Replied to email',
+        text: body
+    };
+
+    transporter.sendMail(mailOptions, function (error: any, info: { response: string; }) {
+        if (error) {
+            console.log(error);
+            // TODO What should we do if mail send errors after successful alterations
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+
+    console.log("HERE\n");
+
 }
 
 export default async function Ticket({ params }: { params: { id: string } }) {
@@ -30,6 +67,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
     }
 
     const elementShadow = 'drop-shadow(4px 6px 10px #00000044)'
+
 
     // Probably want an edit button somewhere below
     return (
@@ -136,6 +174,19 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                         Body
                     </Typography>
                     {ticket.body}
+                </Box>
+            </Grid>
+            <Grid sx={{ width: '100%' }}>
+                <Box sx={{
+                    borderRadius: 1,
+                    bgcolor: 'primary.dark',
+                    padding: '6px',
+                    minHeight: '100%',
+                    filter: elementShadow
+                }}>
+                    <form action={reply}>
+                        <ReplyStack />
+                    </form>
                 </Box>
             </Grid>
         </Grid>
