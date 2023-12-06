@@ -5,7 +5,7 @@ export async function POST(request: Request) {
 	const json = await request.json()
 	await prisma.ticket.deleteMany({
 		where: json
-	}).catch(async (e) => {
+	}).catch(async (e: any) => {
 		return Response.json({ message: "Deletion failed" })
 	})
 

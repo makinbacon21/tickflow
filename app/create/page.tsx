@@ -23,7 +23,7 @@ export default async function Create() {
     let agent_emails = formData.get('agent_emails')?.toString()
     let body = formData.get('body')?.toString()
 
-    await prisma.ticket.create({
+      const ticket = await prisma.ticket.create({
       data: {
         user_emails: user_emails ? user_emails : "",
         agent_emails: agent_emails ? agent_emails : "",
@@ -37,9 +37,9 @@ export default async function Create() {
       from: "tickflow@sccs.swarthmore.edu",
       // TODO Switch to adressing from testing email
       // to: (json['user_emails'].concat(", ")).concat(json[agent_emails]),
-      to: "tmakin1@swarthmore.edu",
+      to: ticket.user_emails.toString(),
       // TODO Refrence ID here	
-      subject: "SCCS Ticket Created",
+        subject: "SCCS Ticket #" + ticket.id + " Created",
       text: "The following updates were made to your ticket: ".concat(body ? body : "")
     };
 

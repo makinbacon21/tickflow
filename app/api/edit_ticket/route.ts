@@ -8,7 +8,7 @@ export async function POST(request: Request) {
             id: json.id
         },
         data: json.body,
-    }).catch(async (e) => {
+    }).catch(async (e: any) => {
         return Response.json({ message: "Edit failed" })
     })
 

@@ -54,7 +54,7 @@ async function reply(formData: FormData) {
             body: newBody.concat(ticket.body),
             date_modified: new Date()
         },
-    }).catch(async (e) => {
+    }).catch(async (e: any) => {
         console.log("edit failed")
     })
 
