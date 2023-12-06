@@ -15,7 +15,7 @@ model Ticket {
     id              Int         @id @default(autoincrement())
     user_emails     String      // comma separated
     agent_emails    String      // comma separated
-    body            String?
+    body            String      @db.LongText
     date_created    DateTime
     date_modified   DateTime
     completed       Boolean     @default(false)
