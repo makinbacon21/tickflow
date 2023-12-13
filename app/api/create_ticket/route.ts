@@ -3,6 +3,21 @@ import prisma from '../../../lib/db'
 
 export async function POST(request: Request) {
     const json = await request.json()
+    
+    const preexisting = await prisma.ticket.findMany({
+        where: {
+            subject: json['subject'],
+            user_emails: {
+                hasSome: json.user_emails,
+            },
+            completed: true,
+        }
+    })
+
+    if (preexisting) {
+        return Response.json({message: "Ticket already exists"})
+    }
+    
     let id = -1
     let date_created = new Date()
     let date_modified = new Date()
