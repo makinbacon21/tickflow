@@ -15,7 +15,20 @@ export async function POST(request: Request) {
     })
 
     if (preexisting) {
-        return Response.json({message: "Ticket already exists"})
+        await prisma.ticket.update({
+            where: {
+                id: preexisting[0].id
+            },
+            data: {
+                body: (json['body'] + "\n\n============================================\
+                    \n\n" + preexisting[0].body),
+                date_modified: new Date()
+            },
+        }).catch(async (e: any) => {
+            console.log("edit failed")
+        })
+
+        return Response.json({})
     }
     
     let id = -1
