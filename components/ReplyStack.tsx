@@ -4,7 +4,6 @@ import { Button, Stack, TextField } from '@mui/material'
 import { useState } from 'react';
 
 export function ReplyStack() {
-    const [userValue, setUserValue] = useState("");
     const [agentValue, setAgentValue] = useState("");
     const [onSubmit, setOnSubmit] = useState(false);
 
@@ -20,13 +19,15 @@ export function ReplyStack() {
                 name="body"
                 label="Body"
                 multiline
-                maxRows={4}
+                maxRows={40}
             />
             <Button
                 type="submit"
                 key='enter'
                 sx={{ my: 2, color: 'white', display: 'block' }}
-                onClick={() => setOnSubmit(true)}
+                onClick={() => {
+                    setOnSubmit(true)
+                }}
             >
                 Reply
             </Button>

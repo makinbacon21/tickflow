@@ -6,17 +6,18 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
 // this is a model for a ticket in the db
 model Ticket {
     id              Int         @id @default(autoincrement())
-    user_emails     String      // comma separated
-    agent_emails    String      // comma separated
-    body            String      @db.LongText
+    user_emails     String[]
+    agent_emails    String[]
+    body            String
     date_created    DateTime
     date_modified   DateTime
     completed       Boolean     @default(false)
+    subject         String      
 }

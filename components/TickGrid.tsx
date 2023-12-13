@@ -21,15 +21,6 @@ import {
     GridRowModel,
     GridRowEditStopReasons,
 } from '@mui/x-data-grid';
-import {
-    randomCreatedDate,
-    randomTraderName,
-    randomId,
-    randomArrayItem,
-} from '@mui/x-data-grid-generator';
-import { json } from 'stream/consumers';
-import { parse } from 'path';
-import { redirect } from 'next/dist/server/api-utils';
 import Link from 'next/link';
 
 interface EditToolbarProps {
@@ -46,8 +37,8 @@ function EditToolbar(props: EditToolbarProps) {
         await fetch("/api/create_ticket", {
             method: "POST",
             body: JSON.stringify({
-                user_emails: "",
-                agent_emails: "",
+                user_emails: [""],
+                agent_emails: [""],
                 body: "",
                 date_created: new Date(),
                 date_modified: new Date()
@@ -145,15 +136,19 @@ export default function TickGrid(props: any) {
     const processRowUpdate = async (newRow: GridRowModel) => {
         const updatedRow = { ...newRow, isNew: false };
 
+        let user_emails_arr = newRow.user_emails.split(',')
+        let agent_emails_arr = newRow.agent_emails.split(',')
+
         await fetch("/api/edit_ticket", {
             method: "POST",
             body: JSON.stringify({
                 id: parseInt(newRow.id.toString()),
                 body: {
-                    user_emails: newRow.user_emails,
-                    agent_emails: newRow.agent_emails,
+                    user_emails: user_emails_arr,
+                    agent_emails: agent_emails_arr,
                     body: newRow.body,
-                    date_modified: new Date()
+                    date_modified: new Date(),
+                    subject: newRow.subject,
                 }
             }),
             headers: {
@@ -177,9 +172,9 @@ export default function TickGrid(props: any) {
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 50 },
+        { field: 'subject', headerName: 'Subject', width: 200, editable: true },
         { field: 'user_emails', headerName: 'User Emails', width: 200, editable: true },
         { field: 'agent_emails', headerName: 'Agent Emails', width: 200, editable: true },
-        { field: 'body', headerName: 'Body', width: 200, editable: true },
         { field: 'date_created', headerName: 'Date Created', width: 120 },
         { field: 'date_modified', headerName: 'Date Modified', width: 120 },
         {

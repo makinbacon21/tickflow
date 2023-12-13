@@ -40,12 +40,13 @@ watcher.on('change', async (event) => {
     }
 
     out = {
-        subject: parsed.subject,
+        subject: parsed.subject.replace(new RegExp('Re:', 'g'), '').trim(),
         body: parsed.text,
         date: parsed.date,
         agent_emails: parsed.to.text,
         user_emails: parsed.from.text
     }
+
 
     if (logfile && logfile != "stdout")
         fs.writeFileSync(logfile, out)
@@ -54,6 +55,12 @@ watcher.on('change', async (event) => {
 
     if (!out || out == {}) {
         console.log("empty!")
+        return
+    }
+
+
+    if (ticketExists) {
+        console.log("This ticket already exists")
         return
     }
 

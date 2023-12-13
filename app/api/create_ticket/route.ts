@@ -12,7 +12,8 @@ export async function POST(request: Request) {
           agent_emails: json['agent_emails'] ? json['agent_emails'] : "",
           body: json['body'],
           date_created: date_created,
-          date_modified: date_modified
+          date_modified: date_modified,
+          subject: "SCCS Ticket #" + id + " Created"
         },
         select: {
             id: true

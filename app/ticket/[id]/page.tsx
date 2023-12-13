@@ -1,7 +1,5 @@
 import { Box, List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography } from '@mui/material'
 import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { notFound } from 'next/navigation'
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { v4 as uuidv4 } from 'uuid';
@@ -35,14 +33,19 @@ async function reply(formData: FormData) {
     'use server'
     let newBody = formData.get('body')?.toString()
 
-    if (!newBody) {
-        newBody = ""
+    if (!newBody || newBody == '') {
+        return
+    }
+
+    if(!ticket) {
+        console.log("Reply not sent: ticket was not found.")
+        return
     }
 
     var mailOptions = {
-        from: 'staff@sccs.swarthmore.edu',
+        from: 'tickflow@sccs.swarthmore.edu',
         to: ticket.user_emails,
-        subject: 'SCCS replied to your ticket',
+        subject: ticket.subject,
         text: newBody
     };
 
@@ -51,7 +54,8 @@ async function reply(formData: FormData) {
             id: ticket.id
         },
         data: {
-            body: newBody.concat(ticket.body),
+            body:(newBody + "\n\n============================================\
+                    \n\n" + ticket.body),
             date_modified: new Date()
         },
     }).catch(async (e: any) => {
@@ -66,8 +70,6 @@ async function reply(formData: FormData) {
             console.log('Email sent: ' + info.response);
         }
     });
-
-    console.log("HERE\n");
 
 }
 
@@ -132,31 +134,6 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                                 color: 'inherit',
                                 textDecoration: 'none'
                             }}>
-                                Agents
-                            </Typography>
-                        </ListItem>
-                        {ticket.agent_emails.split(",").map((email: any) => (
-                            <ListItem key={uuidv4()}>
-                                <ListItemAvatar sx={{
-                                    filter: elementShadow
-                                }}>
-                                    <Avatar>
-                                        <ImageIcon />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText primary="Assigned Agent <maybe get name>" secondary={email} />
-                            </ListItem>
-                        ))}
-                    </List>
-                </Grid>
-                <Grid sx={{ width: '100%' }}>
-                    <List sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 2, backgroundColor: 'primary.dark', filter: elementShadow }}>
-                        <ListItem>
-                            <Typography variant="h6" sx={{
-                                fontWeight: 700,
-                                color: 'inherit',
-                                textDecoration: 'none'
-                            }}>
                                 Users
                             </Typography>
                         </ListItem>
@@ -174,6 +151,32 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                         ))}
                     </List>
                 </Grid>
+
+                <Grid sx={{ width: '100%' }}>
+                    <List sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 2, backgroundColor: 'primary.dark', filter: elementShadow }}>
+                        <ListItem>
+                            <Typography variant="h6" sx={{
+                                fontWeight: 700,
+                                color: 'inherit',
+                                textDecoration: 'none'
+                            }}>
+                                Agents
+                            </Typography>
+                        </ListItem>
+                        {ticket.agent_emails.split(",").map((email: any) => (
+                            <ListItem key={uuidv4()}>
+                                <ListItemAvatar sx={{
+                                    filter: elementShadow
+                                }}>
+                                    <Avatar>
+                                        <ImageIcon />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText primary="Assigned Agent <maybe get name>" secondary={email} />
+                            </ListItem>
+                        ))}
+                    </List>
+                </Grid>
             </Grid>
 
             <Grid xs={12} sm={8}>
@@ -181,17 +184,24 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                     borderRadius: 1,
                     bgcolor: 'primary.dark',
                     padding: '6px',
-                    minHeight: '100%',
-                    filter: elementShadow
+                    filter: elementShadow,
                 }}>
                     <Typography variant="h6" sx={{
                         fontWeight: 700,
                         color: 'inherit',
                         textDecoration: 'none'
                     }}>
-                        Body
+                        {ticket.subject}
                     </Typography>
-                    {ticket.body}
+                    <Typography sx={{
+                        color: 'inherit',
+                        textDecoration: 'none',
+                        whiteSpace: 'pre-line',
+                        height: '60vh',
+                        overflowY: 'scroll',
+                    }}>
+                        {ticket.body}
+                    </Typography>
                 </Box>
             </Grid>
             <Grid sx={{ width: '100%' }}>

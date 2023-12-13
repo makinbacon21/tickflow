@@ -16,15 +16,16 @@ services:
     environment:
       NODE_ENV: production
       # TODO: user perms instead of root
-      DATABASE_URL: "mysql://root:${MARIADB_ROOT_PASSWORD}@tickflow-db:3306/MARIADB_DATABASE"
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@tickflow-db:5432/POSTGRES_DB"
     volumes:
       - ./logs:/usr/src/app/logs
     ports:
       - "${INTERNAL_PORT}:3000"
     # Ensure db is migrated to current version, generate bindings, and serve
-    command: sh -c "sleep 10 && npx prisma migrate dev --name init && npx prisma generate && npm start "
+    command: sh -c "sleep 10 && npm start "
+    # && npx prisma migrate dev --name init
   tickflow-db:
-    image: mariadb:11
+    image: postgres:16.1
     volumes:
       - ./db-backup:/backup
       - ./data:/var/lib/mysql
