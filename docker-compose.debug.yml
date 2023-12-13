@@ -13,6 +13,8 @@ services:
       DATABASE_URL: "postgresql://user:p@ssw0rd@tickflow-db:5432/tickflow_db"
     ports:
       - 5469:3000
+    env_file:
+      - .env
     command: sh -c "npm install && sleep 10 && npx prisma migrate dev --name init && npx prisma generate && npm run dev "
 
   tickflow-db:

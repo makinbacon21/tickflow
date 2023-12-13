@@ -2,6 +2,8 @@ export const dynamic = 'force-dynamic'
 
 import TickGrid from '@/components/TickGrid'
 import prisma from '../lib/db'
+import { getServerSession } from "next-auth/next"
+import { redirect } from 'next/navigation'
 
 async function getData() {
 	const data = await prisma.ticket.findMany()
@@ -21,9 +23,14 @@ async function getData() {
 }
 
 export default async function Home() {
-	const dynamicData = await getData()
+    const session = await getServerSession()
+    if(!session) {
+        redirect("/create")
+    } else {
+        const dynamicData = await getData()
 
-    return (
-        <TickGrid rows={dynamicData} />
-    )
+        return (
+            <TickGrid rows={dynamicData} />
+        )
+    }
 }

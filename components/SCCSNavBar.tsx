@@ -13,11 +13,37 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
 const pages = { 'Home': '/', 'Create': '/create', 'Help': '/help' };
-const settings = ['Logout'];
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar(props: any) {
+    const { data: session, status } = useSession();  
+
+    let authenticated;
+    let loginLink;
+    let nameButton;
+    if (props.hasOwnProperty("login")) {
+      loginLink = null
+      nameButton = null
+    } else {
+      if (status === "authenticated") {
+        authenticated = true
+        loginLink = (
+            <MenuItem key="logout">
+                <Link href="/api/auth/signout"><Typography textAlign="center">Log out</Typography></Link>
+            </MenuItem>
+        )
+        nameButton = session.user?.name
+      } else {
+        authenticated = false
+        loginLink = (
+            <></>
+        )
+        nameButton = "Log In"
+      }
+    }
+
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -127,12 +153,14 @@ function ResponsiveAppBar() {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                            </IconButton>
+                        <Tooltip title="User settings">
+                            <Button variant="text" onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <Link href={authenticated ? "" : "/api/auth/signin"} className="text-white transition-colors duration-200 ease-in-out hover:text-accent">
+                                    {nameButton}
+                                </Link>
+                            </Button>
                         </Tooltip>
-                        <Menu
+                        {authenticated ? <Menu
                             sx={{ mt: '45px' }}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
@@ -148,12 +176,8 @@ function ResponsiveAppBar() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
+                            {loginLink}
+                        </Menu> : <></>}
                     </Box>
                 </Toolbar>
             </Container>

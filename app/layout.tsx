@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Raleway } from 'next/font/google'
 import SCCSNavBar from '@/components/SCCSNavBar'
 import ThemeRegistry from '@/app/ThemeRegistry'
+import { NextAuthProvider } from './NextAuthProvider';
 import './globals.css'
 
 const raleway = Raleway({ subsets: ['latin'] })
@@ -17,6 +18,7 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
+        <NextAuthProvider>
         <html lang="en">
             <body className={raleway.className + " bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-primary via-dark-blue to-black-600"}>
                 <ThemeRegistry options={{ key: 'mui' }}>
@@ -29,5 +31,6 @@ export default function RootLayout({
                 </ThemeRegistry>
             </body>
         </html>
+        </NextAuthProvider>
     )
 }
