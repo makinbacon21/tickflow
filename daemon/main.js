@@ -40,11 +40,11 @@ watcher.on('change', async (event) => {
     }
 
     out = {
-        subject: parsed.subject.replace(new RegExp('Re:', 'g'), '').trim(),
+        subject: parsed.subject.replace("Re: ", ""),
         body: parsed.text,
         date: parsed.date,
-        agent_emails: parsed.to.text,
-        user_emails: parsed.from.text
+        agent_emails: parsed.to.text.split(','),
+        user_emails: parsed.from.text.split(','),
     }
 
 
@@ -58,21 +58,16 @@ watcher.on('change', async (event) => {
         return
     }
 
-
-    if (ticketExists) {
-        console.log("This ticket already exists")
-        return
-    }
-
     // post ticket
-    await fetch("http://tickflow.sccs.swarthmore.edu/api/create_ticket", {
+    const response = await fetch("https://tickflow.sccs.swarthmore.edu/api/create_ticket", {
         method: "POST",
         body: JSON.stringify(out),
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
-    }).then((response) => response.json())
-        .then((json) => console.log(json))
+    })
+
+    console.log(await response.json())
 
 });
 

@@ -143,10 +143,16 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                                     filter: elementShadow
                                 }}>
                                     <Avatar>
-                                        <ImageIcon />
+                                    <Typography variant="h6" sx={{
+                                        fontWeight: 700,
+                                        color: 'inherit',
+                                        textDecoration: 'none'
+                                    }}>
+                                        {email.substring(0, 1).toUpperCase()}
+                                    </Typography>
                                     </Avatar>
                                 </ListItemAvatar>
-                                <ListItemText primary="User <maybe get name>" secondary={email} />
+                                <ListItemText primary={email.indexOf("<") != -1 ? email.substring(0, email.indexOf("<")) : email.substring(0, email.indexOf("@"))} secondary={email.indexOf("<") != -1 ? email.substring(email.indexOf("<") + 1, email.indexOf(">")) : email} />
                             </ListItem>
                         ))}
                     </List>
@@ -169,10 +175,16 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                                     filter: elementShadow
                                 }}>
                                     <Avatar>
-                                        <ImageIcon />
+                                    <Typography variant="h6" sx={{
+                                        fontWeight: 700,
+                                        color: 'inherit',
+                                        textDecoration: 'none'
+                                    }}>
+                                        {email.substring(0, 1).toUpperCase()}
+                                    </Typography>
                                     </Avatar>
                                 </ListItemAvatar>
-                                <ListItemText primary="Assigned Agent <maybe get name>" secondary={email} />
+                                <ListItemText primary={email.indexOf("<") != -1 ? email.substring(0, email.indexOf("<")) : email.substring(0, email.indexOf("@"))} secondary={email.indexOf("<") != -1 ? email.substring(email.indexOf("<") + 1, email.indexOf(">")) : email} />
                             </ListItem>
                         ))}
                     </List>

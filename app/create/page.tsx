@@ -19,15 +19,15 @@ export default async function Create() {
 
   async function create(formData: FormData) {
     'use server'
-    let user_emails = formData.get('user_emails')?.toString()
-    let agent_emails = formData.get('agent_emails')?.toString()
+    let user_emails = formData.get('user_emails')?.toString().split(",")
+    let agent_emails = formData.get('agent_emails')?.toString().split(",")
     let subject = formData.get('subject')?.toString()
     let body = formData.get('body')?.toString()
 
     const ticket = await prisma.ticket.create({
       data: {
-        user_emails: user_emails ? user_emails : "",
-        agent_emails: agent_emails ? agent_emails : "",
+        user_emails: user_emails ? user_emails : [],
+        agent_emails: agent_emails ? agent_emails : [],
         body: body ? body : "",
         date_created: new Date(),
         date_modified: new Date(),
