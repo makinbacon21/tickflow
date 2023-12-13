@@ -10,7 +10,7 @@ export async function POST(request: Request) {
             user_emails: {
                 hasSome: json.user_emails,
             },
-            completed: true,
+            completed: false,
         }
     })
 
