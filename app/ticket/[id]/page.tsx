@@ -137,7 +137,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                                 Users
                             </Typography>
                         </ListItem>
-                        {ticket.user_emails.split(",").map((email: any) => (
+                        {ticket.user_emails.map((email: any) => (
                             <ListItem key={uuidv4()}>
                                 <ListItemAvatar sx={{
                                     filter: elementShadow
@@ -163,7 +163,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                                 Agents
                             </Typography>
                         </ListItem>
-                        {ticket.agent_emails.split(",").map((email: any) => (
+                        {ticket.agent_emails.map((email: any) => (
                             <ListItem key={uuidv4()}>
                                 <ListItemAvatar sx={{
                                     filter: elementShadow
@@ -184,6 +184,7 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                     borderRadius: 1,
                     bgcolor: 'primary.dark',
                     padding: '6px',
+                    height: '100%',
                     filter: elementShadow,
                 }}>
                     <Typography variant="h6" sx={{
@@ -197,8 +198,8 @@ export default async function Ticket({ params }: { params: { id: string } }) {
                         color: 'inherit',
                         textDecoration: 'none',
                         whiteSpace: 'pre-line',
-                        height: '60vh',
                         overflowY: 'scroll',
+                        height: 'calc(100% - 36px)',
                     }}>
                         {ticket.body}
                     </Typography>
