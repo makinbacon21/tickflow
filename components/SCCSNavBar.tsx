@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 
-const pages = { 'Home': '/', 'Create': '/create', 'Help': '/help' };
+const pages = { 'Home': '/', 'Create': '/create' };
 
 function ResponsiveAppBar(props: any) {
     const { data: session, status } = useSession();  
