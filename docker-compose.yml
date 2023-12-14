@@ -16,7 +16,7 @@ services:
     environment:
       NODE_ENV: production
       # TODO: user perms instead of root
-      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@tickflow-db:5432/POSTGRES_DB"
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@tickflow-db:5432/${POSTGRES_DB}"
     volumes:
       - ./logs:/usr/src/app/logs
     ports:
