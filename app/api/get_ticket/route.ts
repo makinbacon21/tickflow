@@ -8,5 +8,5 @@ export async function GET(request: Request) {
 	}).catch(async (e: any) => {
 		return Response.json({ message: "Could not retrieve ticket" })
 	})
-    return ticket
+    return Response.json(ticket)
 }

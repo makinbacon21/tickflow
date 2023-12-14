@@ -41,7 +41,8 @@ function EditToolbar(props: EditToolbarProps) {
                 agent_emails: [""],
                 body: "",
                 date_created: new Date(),
-                date_modified: new Date()
+                date_modified: new Date(),
+                subject: ""
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
